@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package>
+  <name>hsrb_rosnav</name>
+  <version>0.5.0</version>
+  <description>hsrb_rosnav meta package</description>
+  <maintainer email="xr-hsr-support@mail.toyota.co.jp">HSR Support</maintainer>
+
+  <license>BSD 3-clause Clear License</license>
+
+  <author>Fukukazu Kawata</author>
+  <author>Koji Terada</author>
+  <author>Takafumi Mizuno</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>hsrb_mapping</run_depend>
+  <run_depend>hsrb_rosnav_config</run_depend>
+  <export>
+    <metapackage/>
+  </export>
+</package>

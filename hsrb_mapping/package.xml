@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>hsrb_mapping</name>
+  <version>0.5.0</version>
+  <description>Launch and config files for navigation with HSR-B.</description>
+
+  <maintainer email="xr-hsr-support@mail.toyota.co.jp">HSR Support</maintainer>
+
+  <license>BSD 3-clause Clear License</license>
+
+  <author>Kazuhito Tanaka</author>
+  <author>Koji Terada</author>
+  <author>Nobuyuki Matsuno</author>
+  <author>Takafumi Mizuno</author>
+  <author>Tokyo Opensource Robotics Kyokai</author>
+  <author>Yuta Watanabe</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>gmapping</depend>
+  <depend>hector_mapping</depend>
+  <depend>map_server</depend>
+  <depend>slam_karto</depend>
+
+  <exec_depend>rviz</exec_depend>
+  <exec_depend>joy</exec_depend>
+  <exec_depend>teleop_twist_keyboard</exec_depend>
+  <exec_depend>teleop_twist_joy</exec_depend>
+
+  <test_depend>roslaunch</test_depend>
+  <test_depend>rostest</test_depend>
+  <test_depend>roslint</test_depend>
+  <test_depend>imagemagick</test_depend>
+  <test_depend>tmc_gazebo_worlds</test_depend>
+  <test_depend>rviz</test_depend>
+  <test_depend>joint_state_publisher</test_depend>
+  <test_depend>controller_manager</test_depend>
+  <test_depend>hsrb_common_config</test_depend>
+  <test_depend>hsrb_gazebo_bringup</test_depend>
+  <test_depend>tf</test_depend>
+
+</package>

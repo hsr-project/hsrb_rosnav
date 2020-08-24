@@ -1,0 +1,109 @@
+<!--
+Copyright (c) 2018, Toyota Motor Corporation
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+ * Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+ * Neither the name of Toyota Motor Corporation nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+-->
+<launch>
+  <arg name="gui" default="false"/>
+  <arg name="rviz" default="false"/>
+  <arg name="fast_physics" default="false" />
+
+  <arg unless="$(arg fast_physics)" name="world_suffix" value=""/>
+  <arg     if="$(arg fast_physics)" name="world_suffix" value="_fast"/>
+
+  <arg name="world_name" value="$(find hsrb_rosnav_config)/test/test.world"/>
+  <arg name="robot_pos" value="-x 0 -y 0 -z 0 -Y 0" />
+
+  <arg name="map_file" default="$(find hsrb_rosnav_config)/test/map.yaml"/>
+
+  <!-- gazebo simulation -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="world_name" value="$(arg world_name)"/>
+  </include>
+
+  <arg     if="$(arg fast_physics)" name="implicit_damping" value="true"/>
+  <arg unless="$(arg fast_physics)" name="implicit_damping" value="false"/>
+  <arg     if="$(arg fast_physics)" name="gains_suffix" value="_fast"/>
+  <arg unless="$(arg fast_physics)" name="gains_suffix" value=""/>
+
+  <include file="$(find hsrb_description)/robots/upload_hsrb.launch">
+    <arg name="visualization" default="false" />
+    <arg name="implicit_damping" value="$(arg implicit_damping)" />
+  </include>
+
+  <rosparam file="$(find hsrb_gazebo_bringup)/params/hsrb_pid_gains$(arg gains_suffix).yaml" command="load" />
+
+  <node name="spawn_hsrb_model" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param robot_description -model hsrb $(arg robot_pos) -J arm_lift_joint 0.05 -J arm_flex_joint 0.0 -J arm_roll_joint -1.57 -J wrist_flex_joint -1.57 -J wrist_roll_joint 0.0 -J head_pan_joint 0.0 -J head_tilt_joint 0.0 -J hand_motor_joint 1.2"
+        respawn="false" output="screen" />
+
+  <arg name="namespace" default="/hsrb" />
+  <group ns="$(arg namespace)">
+    <rosparam command="load" file="$(find hsrb_common_config)/params/hsrb_controller_config.yaml"/>
+    <rosparam command="load" file="$(find hsrb_gazebo_bringup)/params/hsrb_controller_config.yaml"/>
+    <node name="controller_spawner"
+          pkg="controller_manager"
+          type="spawner"
+          respawn="false"
+          output="screen"
+          args="joint_state_controller
+                arm_trajectory_controller
+                head_trajectory_controller
+                omni_base_controller
+                --timeout 60" />
+
+    <node name="odometry_switcher" pkg="tmc_odometry_switcher" type="odometry_switcher_node">
+      <remap from="switched_odom" to="odom"/>
+      <rosparam command="load" file="$(find hsrb_common_config)/params/hsrb_odometry_config.yaml"/>
+      <param name="initial_odom" value="wheel_odom"/>
+    </node>
+  </group>
+
+  <!-- This strange lines are need for passive wheel joints. -->
+  <remap from="joint_states" to="/hsrb/robot_state/joint_states" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen" />
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" respawn="false" output="screen" >
+    <rosparam param="source_list">["/hsrb/joint_states"]</rosparam>
+  </node>
+
+  <!-- Static tf for the head sensor -->
+  <node name="head_l_stereo_camera_frame_pub" pkg="tf" type="static_transform_publisher"
+        args="0 0 0 0 0 0 head_l_stereo_camera_link head_l_stereo_camera_frame 100" />
+
+  <node name="head_r_stereo_camera_frame_pub" pkg="tf" type="static_transform_publisher"
+        args="0 0 0 0 0 0 head_r_stereo_camera_link head_r_stereo_camera_frame 100" />
+
+  <node name="head_rgbd_sensor_rgb_frame_pub" pkg="tf" type="static_transform_publisher"
+        args="0 0 0 0 0 0 head_rgbd_sensor_link head_rgbd_sensor_rgb_frame 100" />
+
+  <node name="head_rgbd_sensor_depth_frame_pub" pkg="tf" type="static_transform_publisher"
+        args="0 0 0 0 0 0 head_rgbd_sensor_link head_rgbd_sensor_depth_frame 100" />
+
+  <node if="$(arg rviz)"
+	name="rviz" pkg="rviz" type="rviz" args="-d $(find hsrb_rosnav_config)/launch/hsrb.rviz"/>
+</launch>

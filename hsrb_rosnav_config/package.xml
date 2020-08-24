@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>hsrb_rosnav_config</name>
+  <version>0.5.0</version>
+  <description>The hsrb_rosnav_config package</description>
+
+  <maintainer email="xr-hsr-support@mail.toyota.co.jp">HSR Support</maintainer>
+
+  <license>BSD 3-clause Clear License</license>
+
+  <author>Kazuhito Tanaka</author>
+  <author>Koji Terada</author>
+  <author>Nobuyuki Matsuno</author>
+  <author>Takafumi Mizuno</author>
+  <author>Tokyo Opensource Robotics Kyokai</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>amcl</depend>
+  <depend>dwa_local_planner</depend>
+  <depend>map_server</depend>
+  <depend>move_base</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>hsrb_description</depend>
+  <depend>gazebo_ros</depend>
+  <depend>controller_manager</depend>
+  <depend>tf</depend>
+  <depend>joint_state_publisher</depend>
+  <depend>tmc_odometry_switcher</depend>
+
+  <test_depend>roslaunch</test_depend>
+  <test_depend>rostest</test_depend>
+  <test_depend>tmc_gazebo_worlds</test_depend>
+  <test_depend>rviz</test_depend>
+  <test_depend>joint_state_publisher</test_depend>
+  <test_depend>controller_manager</test_depend>
+  <test_depend>hsrb_common_config</test_depend>
+  <test_depend>hsrb_gazebo_bringup</test_depend>
+  <test_depend>tf</test_depend>
+
+  <export/>
+
+</package>

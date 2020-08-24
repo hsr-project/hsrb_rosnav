@@ -1,0 +1,54 @@
+<!--
+Copyright (c) 2018, Toyota Motor Corporation
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+ * Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+ * Neither the name of Toyota Motor Corporation nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+-->
+<launch>
+  <arg name="gui" default="false"/>
+  <arg name="rviz" default="false"/>
+  <arg name="map_file" default="$(find hsrb_rosnav_config)/test/map.yaml"/>
+
+  <!-- gazebo simulation -->
+  <include file="$(find hsrb_rosnav_config)/test/test_gazebo.launch">
+    <env name="GAZEBO_MASTER_URI" value="http://localhost:11355"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="rviz" value="$(arg rviz)"/>
+    <arg name="fast_physics" value="false"/>
+  </include>
+
+  <!-- Map server -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+  <!-- Localization -->
+  <include file="$(find hsrb_rosnav_config)/launch/include/amcl.launch.xml"/>
+
+  <!-- Move base conroller -->
+  <include file="$(find hsrb_rosnav_config)/launch/include/move_base.launch.xml"/>
+
+  <!-- Navigation test -->
+  <test test-name="test_hsrb_navigation" pkg="hsrb_rosnav_config" type="test_hsrb_navigation.py" time-limit="300" retry="0"/>
+
+</launch>
