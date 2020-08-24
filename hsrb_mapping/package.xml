@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>hsrb_mapping</name>
-  <version>0.5.0</version>
+  <version>1.0.0</version>
   <description>Launch and config files for navigation with HSR-B.</description>
 
   <maintainer email="xr-hsr-support@mail.toyota.co.jp">HSR Support</maintainer>
