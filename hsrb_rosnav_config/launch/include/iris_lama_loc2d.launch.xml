@@ -1,0 +1,10 @@
+<launch>
+
+  <arg name="scan_topic"     default="/hsrb/base_scan" />
+
+  <node pkg="iris_lama_ros" type="loc2d_ros" name="iris_lama_loc2d">
+    <remap from="scan" to="$(arg scan_topic)" />
+    <rosparam file="$(find hsrb_rosnav_config)/config/iris_lama_loc2d.yaml" command="load" />
+  </node>
+
+</launch>
