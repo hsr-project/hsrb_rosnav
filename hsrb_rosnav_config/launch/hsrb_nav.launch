@@ -28,12 +28,13 @@ POSSIBILITY OF SUCH DAMAGE.
 -->
 <launch>
   <arg name="map_file" default="$(find hsrb_mapping)/map/gmapping/map.yaml"/>
+  <arg name="localization_type" default="amcl"/>
 
   <!-- Map server -->
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
   <!-- Localization -->
-  <include file="$(find hsrb_rosnav_config)/launch/include/amcl.launch.xml"/>
+  <include file="$(find hsrb_rosnav_config)/launch/include/$(arg localization_type).launch.xml"/>
 
   <!-- Move base conroller -->
   <include file="$(find hsrb_rosnav_config)/launch/include/move_base.launch.xml"/>
