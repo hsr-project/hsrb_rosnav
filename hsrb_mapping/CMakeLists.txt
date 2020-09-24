@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(hsrb_mapping)
 
-find_package(catkin REQUIRED COMPONENTS
-  gmapping hector_mapping map_server slam_karto)
+find_package(catkin REQUIRED COMPONENTS)
 
 catkin_package()
 
