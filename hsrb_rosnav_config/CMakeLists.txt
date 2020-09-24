@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(hsrb_rosnav_config)
 
-find_package(catkin REQUIRED COMPONENTS
-  amcl dwa_local_planner map_server move_base)
+find_package(catkin REQUIRED COMPONENTS)
 
 catkin_package()
 
