@@ -56,14 +56,14 @@ DWAPlannerROS:
   acc_lim_y: 3.0
   acc_lim_theta: 15.0
 
-  max_trans_vel: 0.3
-  min_trans_vel: 0.1
+  max_vel_trans: 0.3
+  min_vel_trans: 0.1
   max_vel_x: 0.3
   min_vel_x: 0.0 # disable to move backward
   max_vel_y: 0.3
   min_vel_y: -0.3
-  max_rot_vel: 1.5
-  min_rot_vel: 0.1
+  max_vel_theta: 1.5
+  min_vel_theta: 0.1
 
   yaw_goal_tolerance: 0.1
   xy_goal_tolerance: 0.1
