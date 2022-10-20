@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<package>
+<package format="3">
   <name>hsrb_rosnav</name>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
   <description>hsrb_rosnav meta package</description>
   <maintainer email="xr-hsr-support@mail.toyota.co.jp">HSR Support</maintainer>
 
@@ -11,10 +11,11 @@
   <author>Koji Terada</author>
   <author>Takafumi Mizuno</author>
 
-  <buildtool_depend>catkin</buildtool_depend>
-  <run_depend>hsrb_mapping</run_depend>
-  <run_depend>hsrb_rosnav_config</run_depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <exec_depend>hsrb_mapping</exec_depend>
+  <exec_depend>hsrb_rosnav_config</exec_depend>
+
   <export>
-    <metapackage/>
+    <build_type>ament_cmake</build_type>
   </export>
 </package>

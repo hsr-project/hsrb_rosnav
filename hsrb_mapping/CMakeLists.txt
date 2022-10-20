@@ -1,37 +1,11 @@
-cmake_minimum_required(VERSION 2.8.3)
+# This package has no tests
+cmake_minimum_required(VERSION 3.5)
 project(hsrb_mapping)
 
-find_package(catkin REQUIRED COMPONENTS)
+find_package(ament_cmake REQUIRED)
 
-catkin_package()
+ament_package()
 
-install(DIRECTORY launch config map
-     DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-     USE_SOURCE_PERMISSIONS)
-
-if(CATKIN_ENABLE_TESTING)
-  # tmc_lint
-  # find_package(tmc_lint REQUIRED)
-  # tmc_lint_python(test/test_hsrb_navigation.py)
-  # add_dependencies(tests tmc_lint)
-  find_package(roslint REQUIRED)
-  roslint_python(test/test_hsrb_mapping.py)  
-  add_dependencies(tests roslint)
-
-  find_package(roslaunch REQUIRED)
-  find_package(rostest REQUIRED)
-  file(GLOB LAUNCH_FILES launch/*.launch)
-  foreach(LAUNCH_FILE ${LAUNCH_FILES})
-    # skipping cartographer.launch due to cartographer_ros
-    if(NOT ${LAUNCH_FILE} MATCHES "/cartographer.launch$" )
-      message(STATUS "Testing ${LAUNCH_FILE}")
-      roslaunch_add_file_check(${LAUNCH_FILE})
-    endif()
-  endforeach()
-  # rostest
-  file(GLOB ROSTEST_FILES test/*.test)
-  foreach(ROSTEST_FILE ${ROSTEST_FILES})
-    message(STATUS "Testing ${ROSTEST_FILE}")
-    add_rostest(${ROSTEST_FILE})
-  endforeach()
-endif()
+install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY rviz DESTINATION share/${PROJECT_NAME})

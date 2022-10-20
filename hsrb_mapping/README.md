@@ -6,28 +6,22 @@
 hsrb_mapping は トヨタパートナーロボット HSR の ROS 地図作成パッケージです．
 本パッケージを利用することで環境空間の地図を作成することができます．
 
-ROS Kinetic に対応しています．
+ROS Foxy に対応しています．
 
 
 ## クイックスタート
 
 #### シミュレータの場合
 
-Gazebo シミュレータと RViz を起動します．
+整備中
 
-```
-$ roslaunch hsrb_rosnav_config simple_gazebo_world.launch gui:=true rviz:=true
-```
 
 #### 実機ロボットの場合
 
-実機ロボットを使用する場合の ROS 環境に変更して，
-重複するノードの停止と RViz の起動を行います．
+実機ロボット立ち上げと RViz の起動を行います．
 
 ```
-$ hsrb_mode
-$ rosnode kill /pose_integrator
-$ rviz -d $(rospack find hsrb_rosnav_config)/launch/hsrb.rviz
+$ colcon_cd hsrb_mapping && rviz2 -d rviz/hsr_slam_toolbox_mapping.rviz
 ```
 
 
@@ -35,19 +29,21 @@ $ rviz -d $(rospack find hsrb_rosnav_config)/launch/hsrb.rviz
 
 下記コマンドを実行して地図作成プログラムを起動します．
 
-- **注意** : 実機ロボットの場合には各ターミナル起動時に `hsrb_mode` を実行して ROS 環境を変更してください．
 
 ```
-$ roslaunch hsrb_mapping hector.launch
+$ ros2 launch hsrb_mapping slam_toolbox_mapping.launch.py
 ```
-
-![HSR RViz - Begin Mapping](../doc/images/hsrb-rviz_mapping-hector_start.png)
 
 ### ロボットの移動操作
 
 RQT Robot Steering やジョイスティックコントローラを用いてロボットの移動操作をします．
 
 #### RQT Robot Steering の利用
+事前にRQTのプラグインをインストールしておきます．
+
+```
+$ apt install ros-foxy-rqt-robot-steering
+```
 
 rqt を起動します．
 
@@ -55,23 +51,29 @@ rqt を起動します．
 $ rqt
 ```
 
-rqt のメニューバーにある Plugins から
-Robot Tools > Robot Steering を選択します．
-テキストボックス内に移動速度指令のトピック `/hsrb/command_velocity` を設定します．
+rqt のメニューバーにある Plugins からRobot Tools > Robot Steering を選択します．
+※ Robot SteeringがRobot Tools内に無い場合は，以下オプションを追加してrqt起動を試してみてください．
+```
+$ rqt --force-discover
+```
 
-![HSR RQT - Robot Steering /hsrb/command_velocity](../doc/images/hsrb-rqt_robot-steering_set-topic.png)
-
+テキストボックス内に移動速度指令のトピック `/omni_base_controller/cmd_vel` を設定します．
 スライダを操作してロボットに速度指令を送ります．
+
 
 #### ジョイスティックコントローラの利用
 
-Xbox 360 互換のジョイスティックコントローラパッドを使用してロボットを動かします．
-
+DUALSHOCK3/4 互換のジョイスティックコントローラパッドを使用してロボットを動かします．
 ```
-$ roslaunch hsrb_mapping teleop_joy.launch
+$ ros2 launch hsrb_mapping teleop.launch.py
 ```
 
-Enable ボタンに設定されている4番のボタン LB (Left Shoulder) ボタンを押しながら
+※ 事前に以下パッケージをインストールする必要がある場合があります．
+```
+$ apt install ros-foxy-joy-linux ros-foxy-joy-linux-dbgsym
+```
+
+Enable ボタンに設定されている10番のボタン L1 ボタンを押しながら
 ジョイスティックを操作してロボットに速度指令を送ります．
 
 #### キーボードの利用
@@ -79,7 +81,7 @@ Enable ボタンに設定されている4番のボタン LB (Left Shoulder) ボ�
 キーボード入力から移動速度指令値を出すために次のコマンドを実行します．
 
 ```
-$ roslaunch hsrb_mapping teleop_keyboard.launch
+$ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r cmd_vel:=/omni_base_controller/cmd_vel
 ```
 
 ターミナルに表示されるキーマップに従ってロボットを動かします．
@@ -91,10 +93,8 @@ $ roslaunch hsrb_mapping teleop_keyboard.launch
 地図が完成したら保存をします．
 
 ```
-$ rosrun map_server map_saver
+$ ros2 run nav2_map_server map_saver_cli -f map --ros-args -p save_map_timeout:=100000
 ```
-
-![HSR RViz - End Mapping](../doc/images/hsrb-rviz_mapping-hector_end.png)
 
 カレントディレクトリに下記の2つのファイルが保存されます．
 
@@ -106,130 +106,5 @@ $ rosrun map_server map_saver
 ```
 $ mv map.pgm map.yaml ~/.ros/
 ```
-
------
-
-## リファレンス
-
-### /launch
-
-#### hector.launch
-
-- 起動オプション
-	- なし
-- ノード
-  - /hector_mapping
-    - 入力トピック
-      - /hsrb/base_scan
-      - /tf_static
-      - /tf
-      - /initialpose
-      - /syscommand
-    - 出力トピック
-      - /map
-      - /map_metadata
-      - /slam_out_pose
-      - /slam_cloud
-      - /poseupdate
-      - /tf
-- ソースURL
-  - https://github.com/tork-a/hsrb_ros/blob/master/hsrb_mapping/launch/hector.launch
-
-
-#### gmapping.launch
-
-- 起動オプション
-	- なし
-- ノード
-  - /gmapping
-    - 入力トピック
-      - /hsrb/base_scan
-      - /tf_static
-      - /tf
-    - 出力トピック
-      - /map
-      - /map_metadata
-      - /gmapping/en
-      - /tf
-- ソースURL
-  - https://github.com/tork-a/hsrb_ros/blob/master/hsrb_mapping/launch/gmapping.launch
-
-
-#### karto.launch
-
-- 起動オプション
-	- なし
-- ノード
-  - /slam_karto
-    - 入力トピック
-      - /hsrb/base_scan
-      - /tf_static
-      - /tf
-    - 出力トピック
-      - /map
-      - /map_metadata
-      - /visualization_marker_array
-      - /tf
-- ソースURL
-  - https://github.com/tork-a/hsrb_ros/blob/master/hsrb_mapping/launch/karto.launch
-
-
-#### teleop_joy.launch
-
-- 起動オプション : デフォルト
-	- joy_dev : /dev/input/js0
-- ノード
-  - /joy_node
-    - 入力トピック
-      - なし
-    - 出力トピック
-      - /joy
-      - /diagnostics
-  - /teleop_twist_joy
-    - 入力トピック
-      - /joy
-    - 出力トピック
-      - /hsrb/command_velocity
-- ソースURL
-	- https://github.com/tork-a/hsrb_ros/blob/master/hsrb_mapping/launch/teleop_joy.launch
-
-
-#### teleop_keyboard.launch
-
-- 起動オプション
-	- なし
-- ノード
-  - /teleop_twist_keyboard
-    - 入力トピック
-      - なし
-    - 出力トピック
-      - /hsrb/command_velocity
-- ソースURL
-  - https://github.com/tork-a/hsrb_ros/blob/master/hsrb_mapping/launch/teleop_keyboard.launch
-
-
-
-### /launch/include
-
-#### play_bag_file.launch.xml
-
-- 起動オプション : デフォルト
-	- bag_file : なし
-- ノード
-  - /robot_state_publisher
-    - 入力トピック
-      - TBD
-    - 出力トピック
-      - TBD
-  - /player
-    - 入力トピック
-      - TBD
-    - 出力トピック
-      - TBD
-- ソースURL
-	- https://github.com/tork-a/hsrb_ros/blob/master/hsrb_mapping/launch/include/play_bag_file.launch.xml
-
-
-
 
 <!-- EOF -->
