@@ -27,7 +27,7 @@ def generate_launch_description():
 
     tf_remappings = [('/tf', 'tf'),
                      ('/tf_static', 'tf_static')]
-    velocity_remappings = [('cmd_vel', 'omni_base_controller/cmd_vel')]
+    velocity_remappings = [('cmd_vel', 'omni_base_controller/command_velocity')]
     remappings = tf_remappings + velocity_remappings
 
     param_substitutions = {

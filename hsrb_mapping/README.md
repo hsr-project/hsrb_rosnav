@@ -57,7 +57,7 @@ rqt のメニューバーにある Plugins からRobot Tools > Robot Steering �
 $ rqt --force-discover
 ```
 
-テキストボックス内に移動速度指令のトピック `/omni_base_controller/cmd_vel` を設定します．
+テキストボックス内に移動速度指令のトピック `/omni_base_controller/command_velocity` を設定します．
 スライダを操作してロボットに速度指令を送ります．
 
 
@@ -81,7 +81,7 @@ Enable ボタンに設定されている10番のボタン L1 ボタンを押し�
 キーボード入力から移動速度指令値を出すために次のコマンドを実行します．
 
 ```
-$ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r cmd_vel:=/omni_base_controller/cmd_vel
+$ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r cmd_vel:=/omni_base_controller/command_velocity
 ```
 
 ターミナルに表示されるキーマップに従ってロボットを動かします．

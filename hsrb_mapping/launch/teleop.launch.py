@@ -15,7 +15,7 @@ def generate_launch_description():
     config_filepath = LaunchConfiguration('config_filepath')
 
     return LaunchDescription([
-        DeclareLaunchArgument('joy_vel', default_value='/omni_base_controller/cmd_vel',
+        DeclareLaunchArgument('joy_vel', default_value='/omni_base_controller/command_velocity',
                               description='Base velocity command topic name'),
         DeclareLaunchArgument('joy_dev', default_value='/dev/input/js0',
                               description='Joystick deivice name'),
