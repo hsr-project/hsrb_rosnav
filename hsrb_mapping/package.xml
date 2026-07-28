@@ -1,11 +1,19 @@
 <package format="3">
   <name>hsrb_mapping</name>
-  <version>2.1.1</version>
+  <version>3.0.0</version>
   <description>Launch and config files for navigation with HSR-B.</description>
 
   <maintainer email="xr-hsr-support@mail.toyota.co.jp">HSR Support</maintainer>
-  <author email="dev@opensource-robotics.tokyo.jp">Tokyo Opensource Robotics Kyokai</author>
+
   <license>BSD 3-clause Clear License</license>
+
+  <author>Hiroaki Yaguchi</author>
+  <author>Kazuhito Tanaka</author>
+  <author>Koji Terada</author>
+  <author>Nobuyuki Matsuno</author>
+  <author>Takafumi Mizuno</author>
+  <author>Tokyo Opensource Robotics Kyokai</author>
+  <author>Yuta Watanabe</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <exec_depend>nav2_rviz_plugins</exec_depend>

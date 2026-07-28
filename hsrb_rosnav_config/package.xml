@@ -1,11 +1,18 @@
 <package format="3">
   <name>hsrb_rosnav_config</name>
-  <version>2.1.1</version>
+  <version>3.0.0</version>
   <description>The hsrb_rosnav_config package</description>
 
   <maintainer email="xr-hsr-support@mail.toyota.co.jp">HSR Support</maintainer>
-  <author email="dev@opensource-robotics.tokyo.jp">Tokyo Opensource Robotics Kyokai</author>
+
   <license>BSD 3-clause Clear License</license>
+
+  <author>Hiroaki Yaguchi</author>
+  <author>Kazuhito Tanaka</author>
+  <author>Koji Terada</author>
+  <author>Nobuyuki Matsuno</author>
+  <author>Takafumi Mizuno</author>
+  <author>Tokyo Opensource Robotics Kyokai</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <exec_depend>nav2_bringup</exec_depend>
