@@ -2,6 +2,15 @@
 Changelog for package hsrb_mapping
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+3.0.0 (2026-06-29)
+-------------------
+* Migration to ROS2 jazzy
+* Contributors: Katsushi Fukuoka, Ryu Nishimori, Shigeo Tsuduki
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Changelog for package hsrb_mapping
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 2.1.1 (2025-04-22)
 -------------------
 * Fix the issue where odometry was not being input in rosnav
